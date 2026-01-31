@@ -1,0 +1,19 @@
+# Prisma
+/prisma/migrations/dev.db
+
+# Environment variables
+.env
+
+# Build output
+/dist
+
+# Logs
+*.log
+logs/
+
+# Coverage
+/coverage
+
+# Runtime data
+/dev.db
+/test.db

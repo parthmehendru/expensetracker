@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  amount      Decimal  @db.Decimal(10, 2)
+  category    String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([category])
+  @@index([date])
+  @@index([createdAt])
+}
+
+// For idempotency (preventing duplicate submissions)
+model IdempotencyKey {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  response  Json
+  createdAt DateTime @default(now())
+  expiresAt DateTime @default(dbgenerated("(now() + interval '24 hours')"))
+  
+  @@index([expiresAt])
+}
