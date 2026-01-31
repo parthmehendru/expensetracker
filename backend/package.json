@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "npx prisma migrate deploy && echo 'Migrations applied'",
+    "build": "npx prisma generate && npx prisma db push --accept-data-loss",
     "start": "tsx src/server.ts",
     "start:dev": "nodemon src/server.ts",
     "test": "jest",
