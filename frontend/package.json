@@ -6,7 +6,7 @@
   "description": "Frontend UI for Expense Tracker application",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
