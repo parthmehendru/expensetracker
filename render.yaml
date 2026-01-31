@@ -1,14 +1,22 @@
 services:
   - type: web
     name: expense-tracker-backend
-    runtime: node
-    rootDir: backend
+    env: node
+    plan: free
+    region: ohio
+    rootDir: /  # Important: root of repo
     buildCommand: |
+      echo "Current directory: $(pwd)"
+      echo "Listing contents:"
+      ls -la
+      echo "Building backend..."
+      cd backend
       npm install
       npx prisma generate
       npm run build
       npx prisma migrate deploy
-    startCommand: npm start
+    startCommand: |
+      cd backend && npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -16,25 +24,24 @@ services:
           property: connectionString
       - key: NODE_ENV
         value: production
-      - key: FRONTEND_URL
-        value: https://expense-tracker-frontend.onrender.com
     healthCheckPath: /health
 
-  - type: web
+  - type: static
     name: expense-tracker-frontend
-    runtime: static
-    rootDir: frontend
+    plan: free
+    region: ohio
+    rootDir: /
     buildCommand: |
+      echo "Building frontend..."
+      cd frontend
       npm install
       npm run build
-    staticPublishPath: dist
+    publishDir: frontend/dist
     envVars:
       - key: VITE_API_URL
         value: https://expense-tracker-backend.onrender.com/api
 
 databases:
   - name: expense-tracker-db
-    databaseName: expensetracker
-    user: expensetracker
     plan: free
-    region: ohio  # or any region you prefer
+    region: ohio
