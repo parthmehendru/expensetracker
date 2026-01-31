@@ -1,7 +1,7 @@
 services:
-  # Backend - Node.js web service (has free plan)
-  - name: expense-tracker-backend
-    type: web
+  # Backend Service
+  - type: web
+    name: expense-tracker-backend
     env: node
     plan: free
     buildCommand: |
@@ -10,7 +10,8 @@ services:
       npx prisma generate
       npm run build
     startCommand: |
-      cd backend && npm start
+      cd backend
+      npm start
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -18,10 +19,12 @@ services:
           property: connectionString
       - key: NODE_ENV
         value: production
+      - key: FRONTEND_URL
+        value: https://expense-tracker-frontend.onrender.com
 
-  # Frontend - Static site (no plan needed)
-  - name: expense-tracker-frontend
-    type: web
+  # Frontend Service (Static Site)
+  - type: web
+    name: expense-tracker-frontend
     env: static
     buildCommand: |
       cd frontend
