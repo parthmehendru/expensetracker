@@ -1,20 +1,15 @@
 services:
+  # Backend - Node.js service
   - type: web
     name: expense-tracker-backend
     env: node
     plan: free
     region: ohio
-    rootDir: /  # Important: root of repo
     buildCommand: |
-      echo "Current directory: $(pwd)"
-      echo "Listing contents:"
-      ls -la
-      echo "Building backend..."
       cd backend
       npm install
       npx prisma generate
       npm run build
-      npx prisma migrate deploy
     startCommand: |
       cd backend && npm start
     envVars:
@@ -26,17 +21,17 @@ services:
         value: production
     healthCheckPath: /health
 
-  - type: static
+  # Frontend - Static site (but still type: web with static config)
+  - type: web
     name: expense-tracker-frontend
+    env: static
     plan: free
     region: ohio
-    rootDir: /
     buildCommand: |
-      echo "Building frontend..."
       cd frontend
       npm install
       npm run build
-    publishDir: frontend/dist
+    staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         value: https://expense-tracker-backend.onrender.com/api
